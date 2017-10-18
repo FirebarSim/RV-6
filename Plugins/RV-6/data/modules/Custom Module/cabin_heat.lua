@@ -1,0 +1,1 @@
+createGlobalPropertyf("RV-6/cockpit/cabin_heat",0)
