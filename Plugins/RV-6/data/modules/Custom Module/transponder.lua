@@ -59,7 +59,7 @@ end
 
 function draw()
 	drawAll(components)
-	--drawRectangle (0, 0, 479, 111, rgbColour(0,0,0))
+	drawRectangle (0, 0, 479, 111, rgbColour(0,0,0))
 	if get(mode) == 0 then
 	
 	elseif get(mode) == 4 then

@@ -10,5 +10,5 @@ components = {
 		position = {110,801,479,111} },
 	navcom1 {
 		position = {6,916,723,100} },
-	audiopanel {}
+	--audiopanel {}
 }
