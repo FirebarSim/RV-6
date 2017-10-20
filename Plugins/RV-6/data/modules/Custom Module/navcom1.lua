@@ -2,7 +2,7 @@ size = {723,100}
 
 local quartz = loadFont("quartz.ttf")
 local arial = loadFont("arial.ttf")
---local bendix = loadFont("BendixLCD.ttf")
+local sixteenSeg = loadFont("16Segment.otf")
 
 createGlobalPropertyi("RV-6/radio/com/com1_mode",0) -- 0 = off, 1 = normal, 2 = active entry, 3 = channel select, 4 = channel program, 
 createGlobalPropertyi("RV-6/radio/com/com1_last_mode",0)
@@ -30,14 +30,10 @@ function navcomPowerHandler(phase)
 	if phase == 0 then
 		if get(com1mode) == 0 then
 			set(com1power,1)
-			set(com1mode,1)
 			set(nav1power,1)
-			set(nav1mode,1)
 		else
 			set(com1power,0)
-			set(com1mode,0)
 			set(nav1power,0)
-			set(nav1mode,0)
 		end
 	end
 end
@@ -237,20 +233,9 @@ registerCommandHandler(nav1FineDn,0, nav1FineDnHandler)
 function draw()
 	drawAll(components)
 	drawRectangle(0,0,723,100,rgbColour(0,0,0))
-	if get(com1power) == 1 then
-		if get(com1mode) == 1 then
-			drawText(quartz,35,48,string.format("%3.2f",get(com1freq)/100),45,false,true,TEXT_ALIGN_LEFT,quartz_colour)
-			drawText(quartz,215,48,string.format("%6.2f",get(com1stby)/100),45,false,true,TEXT_ALIGN_LEFT,quartz_colour)
-		elseif get(com1mode) == 2 then
-			drawText(quartz,35,48,string.format("%3.2f",get(com1freq)/100),45,false,true,TEXT_ALIGN_LEFT,quartz_colour)
-		end
-	end
-	if get(nav1power) == 1 then
-		if get(nav1mode) == 1 then
-			drawText(quartz,395,48,string.format("%3.2f",get(nav1freq)/100),45,false,true,TEXT_ALIGN_LEFT,quartz_colour)
-			drawText(quartz,575,48,string.format("%6.2f",get(nav1stby)/100),45,false,true,TEXT_ALIGN_LEFT,quartz_colour)
-		elseif get(nav1mode) == 2 then
-			drawText(quartz,395,48,string.format("%3.2f",get(nav1freq)/100),45,false,true,TEXT_ALIGN_LEFT,quartz_colour)
-		end
-	end
+	drawText(sixteenSeg,165,0,string.format("%3.2f",get(com1freq)/100),30,false,true,TEXT_ALIGN_RIGHT,quartz_colour)
+	drawText(sixteenSeg,165,52,string.format("%3.2f",get(com1freq)/100),30,false,true,TEXT_ALIGN_RIGHT,quartz_colour)
+	drawText(quartz,215,48,string.format("%6.2f",get(com1stby)/100),45,false,true,TEXT_ALIGN_LEFT,quartz_colour)
+	drawText(quartz,395,48,string.format("%3.2f",get(nav1freq)/100),45,false,true,TEXT_ALIGN_LEFT,quartz_colour)
+	drawText(quartz,575,48,string.format("%6.2f",get(nav1stby)/100),45,false,true,TEXT_ALIGN_LEFT,quartz_colour)
 end
