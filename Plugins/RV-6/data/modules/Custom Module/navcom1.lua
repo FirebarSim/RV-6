@@ -1,8 +1,8 @@
 size = {723,100}
 
-local quartz = loadFont("quartz.ttf")
 local arial = loadFont("arial.ttf")
-local sixteenSeg = loadFont("16Segment.otf")
+local sixteenSegment = loadFont("16Segment.otf")
+local sevenSegment = loadFont("7Segment.otf")
 
 createGlobalPropertyi("RV-6/radio/com/com1_mode",0) -- 0 = off, 1 = normal, 2 = active entry, 3 = channel select, 4 = channel program, 
 createGlobalPropertyi("RV-6/radio/com/com1_last_mode",0)
@@ -38,6 +38,9 @@ function navcomPowerHandler(phase)
 	end
 end
 
+local navcomPower = createCommand("RV-6/radio/navcom/navcom1_power_toggle", "Toggles Power to Nav Com 1")
+registerCommandHandler(navcomPower,0, navcomPowerHandler)
+
 function com1TransferHandler(phase)
 	local com1Flip = findCommand("sim/radios/com1_standy_flip")
 	if phase == 0 then
@@ -63,6 +66,9 @@ function com1TransferHandler(phase)
 	end
 end
 
+local com1Transfer = createCommand("RV-6/radio/navcom/com1_transfer", "Press - Switch Frequencies, Hold - Enter Channel Mode")
+registerCommandHandler(com1Transfer,0, com1TransferHandler)
+
 function com1CoarseUpHandler(phase)
 	if phase == 0 then
 		if get(com1mode) == 0 then
@@ -74,6 +80,9 @@ function com1CoarseUpHandler(phase)
 		end
 	end
 end
+
+local com1CoarseUp = createCommand("RV-6/radio/navcom/com1_coarse_up", "Large Knob Up")
+registerCommandHandler(com1CoarseUp,0, com1CoarseUpHandler)
 
 function com1CoarseDnHandler(phase)
 	if phase == 0 then
@@ -87,6 +96,9 @@ function com1CoarseDnHandler(phase)
 	end
 end
 
+local com1CoarseDn = createCommand("RV-6/radio/navcom/com1_coarse_dn", "Large Knob Down")
+registerCommandHandler(com1CoarseDn,0, com1CoarseDnHandler)
+
 function com1FineUpHandler(phase)
 	if phase == 0 then
 		if get(com1mode) == 0 then
@@ -99,6 +111,9 @@ function com1FineUpHandler(phase)
 	end
 end
 
+local com1FineUp = createCommand("RV-6/radio/navcom/com1_fine_up", "Small Knob Up")
+registerCommandHandler(com1FineUp,0, com1FineUpHandler)
+
 function com1FineDnHandler(phase)
 	if phase == 0 then
 		if get(com1mode) == 0 then
@@ -110,6 +125,9 @@ function com1FineDnHandler(phase)
 		end
 	end
 end
+
+local com1FineDn = createCommand("RV-6/radio/navcom/com1_fine_dn", "Small Knob Down")
+registerCommandHandler(com1FineDn,0, com1FineDnHandler)
 
 function com1ChannelHandler(phase)
 --	if phase == 0 then
@@ -131,6 +149,9 @@ function com1ChannelHandler(phase)
 --		end
 --	end
 end
+
+local com1Channel = createCommand("RV-6/radio/navcom/com1_channel", "Small Knob Down")
+registerCommandHandler(com1Channel,0, com1ChannelHandler)
 
 function nav1TransferHandler(phase)
 	local nav1Flip = findCommand("sim/radios/nav1_standy_flip")
@@ -157,6 +178,9 @@ function nav1TransferHandler(phase)
 	end
 end
 
+local nav1Transfer = createCommand("RV-6/radio/navcom/nav1_transfer", "Press - Switch Frequencies, Hold - Enter Channel Mode")
+registerCommandHandler(nav1Transfer,0, nav1TransferHandler)
+
 function nav1CoarseUpHandler(phase)
 	if phase == 0 then
 		if get(nav1mode) == 0 then
@@ -168,6 +192,9 @@ function nav1CoarseUpHandler(phase)
 		end
 	end
 end
+
+local nav1CoarseUp = createCommand("RV-6/radio/navcom/nav1_coarse_up", "Large Knob Up")
+registerCommandHandler(nav1CoarseUp,0, nav1CoarseUpHandler)
 
 function nav1CoarseDnHandler(phase)
 	if phase == 0 then
@@ -181,6 +208,9 @@ function nav1CoarseDnHandler(phase)
 	end
 end
 
+local nav1CoarseDn = createCommand("RV-6/radio/navcom/nav1_coarse_dn", "Large Knob Down")
+registerCommandHandler(nav1CoarseDn,0, nav1CoarseDnHandler)
+
 function nav1FineUpHandler(phase)
 	if phase == 0 then
 		if get(nav1mode) == 0 then
@@ -192,6 +222,9 @@ function nav1FineUpHandler(phase)
 		end
 	end
 end
+
+local nav1FineUp = createCommand("RV-6/radio/navcom/nav1_fine_up", "Small Knob Up")
+registerCommandHandler(nav1FineUp,0, nav1FineUpHandler)
 
 function nav1FineDnHandler(phase)
 	if phase == 0 then
@@ -205,37 +238,18 @@ function nav1FineDnHandler(phase)
 	end
 end
 
-local navcomPower = createCommand("RV-6/radio/navcom/navcom1_power_toggle", "Toggles Power to Nav Com 1")
-registerCommandHandler(navcomPower,0, navcomPowerHandler)
-local com1Transfer = createCommand("RV-6/radio/navcom/com1_transfer", "Press - Switch Frequencies, Hold - Enter Channel Mode")
-registerCommandHandler(com1Transfer,0, com1TransferHandler)
-local com1CoarseUp = createCommand("RV-6/radio/navcom/com1_coarse_up", "Large Knob Up")
-registerCommandHandler(com1CoarseUp,0, com1CoarseUpHandler)
-local com1CoarseDn = createCommand("RV-6/radio/navcom/com1_coarse_dn", "Large Knob Down")
-registerCommandHandler(com1CoarseDn,0, com1CoarseDnHandler)
-local com1FineUp = createCommand("RV-6/radio/navcom/com1_fine_up", "Small Knob Up")
-registerCommandHandler(com1FineUp,0, com1FineUpHandler)
-local com1FineDn = createCommand("RV-6/radio/navcom/com1_fine_dn", "Small Knob Down")
-registerCommandHandler(com1FineDn,0, com1FineDnHandler)
-local com1Channel = createCommand("RV-6/radio/navcom/com1_channel", "Small Knob Down")
-registerCommandHandler(com1Channel,0, com1ChannelHandler)
-local nav1Transfer = createCommand("RV-6/radio/navcom/nav1_transfer", "Press - Switch Frequencies, Hold - Enter Channel Mode")
-registerCommandHandler(nav1Transfer,0, nav1TransferHandler)
-local nav1CoarseUp = createCommand("RV-6/radio/navcom/nav1_coarse_up", "Large Knob Up")
-registerCommandHandler(nav1CoarseUp,0, nav1CoarseUpHandler)
-local nav1CoarseDn = createCommand("RV-6/radio/navcom/nav1_coarse_dn", "Large Knob Down")
-registerCommandHandler(nav1CoarseDn,0, nav1CoarseDnHandler)
-local nav1FineUp = createCommand("RV-6/radio/navcom/nav1_fine_up", "Small Knob Up")
-registerCommandHandler(nav1FineUp,0, nav1FineUpHandler)
 local nav1FineDn = createCommand("RV-6/radio/navcom/nav1_fine_dn", "Small Knob Down")
 registerCommandHandler(nav1FineDn,0, nav1FineDnHandler)
 
 function draw()
 	drawAll(components)
-	drawRectangle(0,0,723,100,rgbColour(0,0,0))
-	drawText(sixteenSeg,165,0,string.format("%3.2f",get(com1freq)/100),30,false,true,TEXT_ALIGN_RIGHT,quartz_colour)
-	drawText(sixteenSeg,165,52,string.format("%3.2f",get(com1freq)/100),30,false,true,TEXT_ALIGN_RIGHT,quartz_colour)
-	drawText(quartz,215,48,string.format("%6.2f",get(com1stby)/100),45,false,true,TEXT_ALIGN_LEFT,quartz_colour)
-	drawText(quartz,395,48,string.format("%3.2f",get(nav1freq)/100),45,false,true,TEXT_ALIGN_LEFT,quartz_colour)
-	drawText(quartz,575,48,string.format("%6.2f",get(nav1stby)/100),45,false,true,TEXT_ALIGN_LEFT,quartz_colour)
+	--drawRectangle(0,0,723,100,rgbColour(0,0,0))
+	drawRectangle(0,0,723,100,rgbColour(32,19,0))
+	drawText(sixteenSegment,165,15,"FLAG",30,false,true,TEXT_ALIGN_RIGHT,quartz_colour)
+	drawText(sevenSegment,165,55,string.format("%3.2f",get(com1freq)/100),30,false,true,TEXT_ALIGN_RIGHT,quartz_colour)
+	drawText(sevenSegment,215,55,string.format("%6.2f",get(com1stby)/100),30,false,true,TEXT_ALIGN_LEFT,quartz_colour)
+	drawText(sixteenSegment,395,15,"FLAG",30,false,true,TEXT_ALIGN_LEFT,quartz_colour)
+	drawText(sevenSegment,395,55,string.format("%3.2f",get(nav1freq)/100),30,false,true,TEXT_ALIGN_LEFT,quartz_colour)
+	drawText(sevenSegment,575,55,string.format("%6.2f",get(nav1stby)/100),30,false,true,TEXT_ALIGN_LEFT,quartz_colour)
+	drawCircle(10,10,5,true,rgbColour(0,255,0))
 end

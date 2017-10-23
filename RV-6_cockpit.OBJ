@@ -13677,7 +13677,7 @@ ANIM_rotate_key 3.00000 -25.00000
 ANIM_rotate_key 4.00000 75.00000
 ANIM_rotate_key 5.00000 124.99998
 ANIM_rotate_end
-ATTR_manip_command_knob rotate_large sim/transponder/transponder_up sim/transponder/transponder_dn Transponder Mode
+ATTR_manip_command_knob rotate_large RV-6/radio/transponder/mode_up RV-6/radio/transponder/mode_down Transponder Mode
 TRIS 27150 372 ## Cylinder041
 ANIM_end
 ATTR_cockpit
