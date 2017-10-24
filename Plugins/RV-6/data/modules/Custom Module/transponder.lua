@@ -1,6 +1,7 @@
 size = {479,111}
 
 local sevenSegment = loadFont("7Segment.otf")
+--local sevenSegment = loadFont("arial.ttf")
 local arial = loadFont("arial.ttf")
 
 createGlobalPropertyf("RV-6/radio/transponder/standard_barometric_altitude",0)
@@ -12,7 +13,7 @@ defineProperty("pressure", globalPropertyf("sim/weather/barometer_current_inhg")
 defineProperty("altitude", globalPropertyf("RV-6/radio/transponder/standard_barometric_altitude"))
 defineProperty("flightlevel", globalPropertyi("RV-6/radio/transponder/flight_level"))
 defineProperty("vfrmode", globalPropertyi("RV-6/radio/transponder/vfr_mode"))
-defineProperty("currentcode", globalPropertyi("sim/cockpit/radios/transponder_code"))
+defineProperty("currentcode", globalPropertyi("sim/cockpit2/radios/actuators/transponder_code"))
 defineProperty("lastcode", globalPropertyi("RV-6/radio/transponder/last_code"))
 defineProperty("squwak",globalPropertyi("sim/cockpit2/radios/indicators/transponder_id"))
 defineProperty("mode",globalPropertyi("sim/cockpit2/radios/actuators/transponder_mode"))
@@ -24,8 +25,6 @@ defineProperty("bus2extra",globalPropertyfae("sim/cockpit2/electrical/plugin_bus
 function rgbColour(r,g,b)
 	return {r/255,g/255,b/255}
 end
-
-local quartz_colour = rgbColour(255,153,0)
 
 function round(num, numDecimalPlaces)
   local mult = 10^(numDecimalPlaces or 0)
@@ -109,9 +108,17 @@ function update()
 	updateAll(components)
 end
 
+local quartz_colour = rgbColour(255,153,0)
+local shadow_colour = rgbColour(32,19,0)
+
 function draw()
 	drawAll(components)
 	drawRectangle (0, 0, 479, 111, rgbColour(0,0,0))
+	drawText(sevenSegment, 310, 36, "8888", 30,false,true,TEXT_ALIGN_LEFT,shadow_colour)
+	drawText(sevenSegment, 80, 36, "888", 30,false,true,TEXT_ALIGN_LEFT,shadow_colour)
+	drawText(arial, 285, 55, "R", 14,true,false,TEXT_ALIGN_LEFT,shadow_colour)
+	drawText(arial, 190, 55, "ALT", 14,true,false,TEXT_ALIGN_LEFT,shadow_colour)
+	drawText(arial, 48, 30, "FL", 14,true,false,TEXT_ALIGN_LEFT,shadow_colour)
 	if get(avionicsswitch) == 1 and get(bus2power) > 11 then
 		if get(mode) == 4 then
 			drawText(sevenSegment, 310, 36, "8888", 30,false,true,TEXT_ALIGN_LEFT,quartz_colour)
