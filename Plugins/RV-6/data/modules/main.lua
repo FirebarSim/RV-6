@@ -11,4 +11,6 @@ components = {
 	navcom1 {
 		position = {6,916,723,100} },
 	--audiopanel {}
+	eigauges {
+		position = {110,654,831,146} },
 }

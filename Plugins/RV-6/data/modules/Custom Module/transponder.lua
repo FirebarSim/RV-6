@@ -1,7 +1,6 @@
 size = {479,111}
 
 local sevenSegment = loadFont("7Segment.otf")
---local sevenSegment = loadFont("arial.ttf")
 local arial = loadFont("arial.ttf")
 
 createGlobalPropertyf("RV-6/radio/transponder/standard_barometric_altitude",0)

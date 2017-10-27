@@ -1,0 +1,14 @@
+http://www.fsd-international.com/Hangar/Bendix/KT76%20Operating%20Handbook.pdf
+http://www.fsd-international.com/Hangar/Bendix/KMA28%20Operating%20Handbook.pdf
+http://www.fsd-international.com/Hangar/Bendix/KA165%20Operating%20Handbook.pdf
+http://1-sim.com/files/SASL3Manual.pdf
+http://www.xsquawkbox.net/xpsdk/docs/DataRefs.html
+https://forums.x-plane.org/index.php?/forums/topic/34016-generic-instruments/
+http://www.aircraftspruce.com/pages/in/electronicsinternational_clocks/ei-chronometers.php
+http://www.aircraftspruce.com/pages/in/fuelinstrumentation_fuelquantity/ei-digitalgraphic5d.php
+http://www.aircraftspruce.com/catalog/inpages/ei-engineanalyzer1.php
+http://www.aircraftspruce.com/catalog/inpages/ei-digitalgraphic4.php
+http://www.aircraftspruce.com/catalog/inpages/ei-fuelflowpressure.php
+http://www.aircraftspruce.com/catalog/inpages/ei-digitalgraphic3.php
+http://www.aircraftspruce.com/catalog/inpages/ei-digitalgraphic2.php
+http://www.aircraftspruce.com/catalog/inpages/ei-digitalgraphic1.php

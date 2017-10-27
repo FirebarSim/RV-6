@@ -2,9 +2,7 @@ size = {723,100}
 
 local arial = loadFont("arial.ttf")
 local sixteenSegment = loadFont("16Segment.otf")
---local sixteenSegment = loadFont("quartz.ttf")
 local sevenSegment = loadFont("7Segment.otf")
---local sevenSegment = loadFont("quartz.ttf")
 
 createGlobalPropertyi("RV-6/radio/navcom/com1_mode",1) -- 1 = normal, 2 = active entry, 3 = channel select, 4 = channel program, 
 createGlobalPropertyi("RV-6/radio/navcom/com1_last_mode",0)
@@ -24,10 +22,13 @@ defineProperty("nav1freq", globalPropertyf("sim/cockpit2/radios/actuators/nav1_f
 defineProperty("nav1stby", globalPropertyf("sim/cockpit2/radios/actuators/nav1_standby_frequency_hz"))
 defineProperty("nav1mode", globalPropertyi("RV-6/radio/navcom/nav1_mode"))
 defineProperty("nav1power",globalPropertyi("sim/cockpit2/radios/actuators/nav1_power"))
-defineProperty("nav1hdefcopilot", globalPropertyf("sim/cockpit2/radios/indicators/nav1_hdef_dots_pilot"))
+defineProperty("nav1hdefcopilot", globalPropertyf("sim/cockpit2/radios/indicators/nav1_hdef_dots_copilot"))
 defineProperty("nav1flag", globalPropertyi("sim/cockpit2/radios/indicators/nav1_display_horizontal"))
-defineProperty("nav1obscopilot", globalPropertyf("sim/cockpit2/radios/actuators/nav1_obs_deg_mag_pilot"))
+defineProperty("nav1obscopilot", globalPropertyf("sim/cockpit2/radios/actuators/nav1_obs_deg_mag_copilot"))
 defineProperty("nav1type", globalPropertyi("sim/cockpit2/radios/indicators/nav1_type"))
+defineProperty("nav1bearing", globalPropertyf("sim/cockpit2/radios/indicators/nav1_bearing_deg_mag"))
+defineProperty("nav1pulled", globalPropertyi("RV-6/radio/navcom/nav1_fineout"))
+defineProperty("nav1tofromcopilot", globalPropertyi("sim/cockpit2/radios/indicators/nav1_flag_from_to_copilot"))
 defineProperty("globaltime",globalPropertyf("sim/time/total_flight_time_sec"))
 defineProperty("timeperiod", globalPropertyf("sim/operation/misc/frame_rate_period"))
 defineProperty("elapsedtime",globalPropertyf("RV-6/radio/navcom/total_navcom_time_sec"))
@@ -35,6 +36,7 @@ defineProperty("elapsedtime",globalPropertyf("RV-6/radio/navcom/total_navcom_tim
 local channel_number = 1
 
 set(nav1power,get(com1power)) -- Initialise Power Values
+set(nav1obscopilot,0)
 
 function rgbColour(r,g,b)
 	return {r/255,g/255,b/255}
@@ -106,12 +108,12 @@ function com1CoarseUpHandler(phase)
 			commandOnce(findCommand("sim/radios/actv_com1_coarse_up"))
 		elseif get(com1mode) == 5 then
 			--Program Freq
-			if get(com1ch,channel_number - 1) == 0 then
-				set(com1ch,11800,channel_number - 1)
-			elseif get(com1ch,channel_number - 1) >= 13600 then
-				set(com1ch,0,channel_number - 1)
+			if get(com1ch,channel_number) == 0 then
+				set(com1ch,11800,channel_number)
+			elseif get(com1ch,channel_number ) >= 13600 then
+				set(com1ch,0,channel_number)
 			else
-				set(com1ch,get(com1ch,channel_number) + 100,channel_number - 1)
+				set(com1ch,get(com1ch,channel_number) + 100,channel_number)
 			end
 		end
 	end
@@ -128,12 +130,12 @@ function com1CoarseDnHandler(phase)
 			commandOnce(findCommand("sim/radios/actv_com1_coarse_down"))
 		elseif get(com1mode) == 5 then
 			--Program Freq
-			if get(com1ch,channel_number - 1) == 0 then
-				set(com1ch,13600,channel_number - 1)
-			elseif get(com1ch,channel_number - 1) <= 11800 then
-				set(com1ch,0,channel_number - 1)
+			if get(com1ch,channel_number) == 0 then
+				set(com1ch,13600,channel_number)
+			elseif get(com1ch,channel_number) <= 11800 then
+				set(com1ch,0,channel_number)
 			else
-				set(com1ch,get(com1ch,channel_number) - 100,channel_number - 1)
+				set(com1ch,get(com1ch,channel_number) - 100,channel_number)
 			end
 		end
 	end
@@ -154,15 +156,15 @@ function com1FineUpHandler(phase)
 			channel_number = channel_number + 1
 		elseif get(com1mode) == 5 then
 			--Program Freq
-			if get(com1ch,channel_number - 1) == 0 then
-				set(com1ch,11800,channel_number - 1)
-			elseif get(com1ch,channel_number - 1) >= 13697 then
-				set(com1ch,0,channel_number - 1)
+			if get(com1ch,channel_number) == 0 then
+				set(com1ch,11800,channel_number)
+			elseif get(com1ch,channel_number) >= 13697 then
+				set(com1ch,0,channel_number)
 			else
-				if get(com1ch,channel_number - 1) % 5 == 0 then
-					set(com1ch,get(com1ch,channel_number) + 2,channel_number - 1)
+				if get(com1ch,channel_number) % 5 == 0 then
+					set(com1ch,get(com1ch,channel_number) + 2,channel_number)
 				else
-					set(com1ch,get(com1ch,channel_number) + 3,channel_number - 1)
+					set(com1ch,get(com1ch,channel_number) + 3,channel_number)
 				end
 			end
 		end
@@ -184,12 +186,12 @@ function com1FineDnHandler(phase)
 			channel_number = channel_number - 1
 		elseif get(com1mode) == 5 then
 			--Program Freq
-			if get(com1ch,channel_number - 1) == 0 then
-				set(com1ch,13697,channel_number - 1)
+			if get(com1ch,channel_number) == 0 then
+				set(com1ch,13697,channel_number)
 			elseif get(com1ch,channel_number) <= 11800 then
 				set(com1ch,0,channel_number)
 			else
-				set(com1ch,get(com1ch,channel_number - 1) - 2.5,channel_number - 1)
+				set(com1ch,get(com1ch,channel_number) - 2.5,channel_number)
 			end
 		end
 	end
@@ -243,7 +245,6 @@ local com1Channel = createCommand("RV-6/radio/navcom/com1_channel", "Small Knob 
 registerCommandHandler(com1Channel,0, com1ChannelHandler)
 
 function nav1TransferHandler(phase)
-	local nav1Flip = findCommand("sim/radios/nav1_standy_flip")
 	if phase == 0 then
 		temp = get(globaltime)
 		flips = 0
@@ -251,17 +252,37 @@ function nav1TransferHandler(phase)
 		if get(globaltime) - temp > 2 and flips < 1 then
 			if get(nav1mode) == 1 then
 				set(nav1mode,2)
-			else
+			elseif get(nav1mode) == 2 then
 				set(nav1mode,1)
+			elseif get(nav1mode) == 3 then
+				commandOnce(findCommand("sim/radios/nav1_standy_flip"))
+			elseif get(nav1mode) == 4 then
+				commandOnce(findCommand("sim/radios/nav1_standy_flip"))
+			elseif get(nav1mode) == 5 then
+				commandOnce(findCommand("sim/radios/nav1_standy_flip"))
+			elseif get(nav1mode) == 6 then
+				set(nav1mode,7)
+			elseif get(nav1mode) == 7 then
+				set(nav1mode,6)
 			end
 			flips = 1
 		end
 	elseif phase == 2 then
 		if get(globaltime) - temp < 2 then
-			if get(nav1mode) == 2 then
+			if get(nav1mode) == 1 then
+				commandOnce(findCommand("sim/radios/nav1_standy_flip"))
+			elseif get(nav1mode) == 2 then
 				set(nav1mode,1)
-			else
-				commandOnce(nav1Flip)
+			elseif get(nav1mode) == 3 then
+				commandOnce(findCommand("sim/radios/nav1_standy_flip"))
+			elseif get(nav1mode) == 4 then
+				commandOnce(findCommand("sim/radios/nav1_standy_flip"))
+			elseif get(nav1mode) == 5 then
+				commandOnce(findCommand("sim/radios/nav1_standy_flip"))
+			elseif get(nav1mode) == 6 then
+				--Nothing
+			elseif get(nav1mode) == 7 then
+				set(nav1mode,6)
 			end
 		end
 	end
@@ -270,14 +291,53 @@ end
 local nav1Transfer = createCommand("RV-6/radio/navcom/nav1_transfer", "Press - Switch Frequencies, Hold - Enter Channel Mode")
 registerCommandHandler(nav1Transfer,0, nav1TransferHandler)
 
+function nav1ModeHandler(phase)
+	if phase == 0 then
+		if get(nav1mode) == 1 then
+			set(nav1mode,3)
+		elseif get(nav1mode) == 2 then
+			set(nav1mode,3)
+		elseif get(nav1mode) == 3 then
+			set(nav1mode,4)
+		elseif get(nav1mode) == 4 then
+			set(nav1mode,5)
+		elseif get(nav1mode) == 5 then
+			set(nav1mode,6)
+		elseif get(nav1mode) == 6 then
+			set(nav1mode,1)
+		elseif get(nav1mode) == 7 then
+			--Nothing
+		end
+	end
+end
+
+local nav1Mode = createCommand("RV-6/radio/navcom/nav1_mode", "Press - Switch Frequencies, Hold - Enter Channel Mode")
+registerCommandHandler(nav1Mode,0, nav1ModeHandler)
+
 function nav1CoarseUpHandler(phase)
 	if phase == 0 then
-		if get(nav1mode) == 0 then
-		
-		elseif get(nav1mode) == 1 then
+		if get(nav1mode) == 1 then
 			commandOnce(findCommand("sim/radios/stby_nav1_coarse_up"))
 		elseif get(nav1mode) == 2 then
 			commandOnce(findCommand("sim/radios/actv_nav1_coarse_up"))
+		elseif get(nav1mode) == 3 then
+			if get(nav1pulled) == 0 then
+				commandOnce(findCommand("sim/radios/actv_nav1_coarse_up"))
+			end
+		elseif get(nav1mode) == 4 then
+			if get(nav1pulled) == 0 then
+				commandOnce(findCommand("sim/radios/actv_nav1_coarse_up"))
+			end
+		elseif get(nav1mode) == 5 then
+			if get(nav1pulled) == 0 then
+				commandOnce(findCommand("sim/radios/actv_nav1_coarse_up"))
+			end
+		elseif get(nav1mode) == 6 then
+			if get(nav1pulled) == 0 then
+				commandOnce(findCommand("sim/radios/actv_nav1_coarse_up"))
+			end
+		elseif get(nav1mode) == 7 then
+			set(elapsedtime,get(elapsedtime) + 60)
 		end
 	end
 end
@@ -287,12 +347,28 @@ registerCommandHandler(nav1CoarseUp,0, nav1CoarseUpHandler)
 
 function nav1CoarseDnHandler(phase)
 	if phase == 0 then
-		if get(nav1mode) == 0 then
-		
-		elseif get(nav1mode) == 1 then
+		if get(nav1mode) == 1 then
 			commandOnce(findCommand("sim/radios/stby_nav1_coarse_down"))
 		elseif get(nav1mode) == 2 then
 			commandOnce(findCommand("sim/radios/actv_nav1_coarse_down"))
+		elseif get(nav1mode) == 3 then
+			if get(nav1pulled) == 0 then
+				commandOnce(findCommand("sim/radios/actv_nav1_coarse_down"))
+			end
+		elseif get(nav1mode) == 4 then
+			if get(nav1pulled) == 0 then
+				commandOnce(findCommand("sim/radios/actv_nav1_coarse_down"))
+			end
+		elseif get(nav1mode) == 5 then
+			if get(nav1pulled) == 0 then
+				commandOnce(findCommand("sim/radios/actv_nav1_coarse_down"))
+			end
+		elseif get(nav1mode) == 6 then
+			if get(nav1pulled) == 0 then
+				commandOnce(findCommand("sim/radios/actv_nav1_coarse_down"))
+			end
+		elseif get(nav1mode) == 7 then
+			set(elapsedtime,get(elapsedtime) - 60)
 		end
 	end
 end
@@ -302,14 +378,38 @@ registerCommandHandler(nav1CoarseDn,0, nav1CoarseDnHandler)
 
 function nav1FineUpHandler(phase)
 	if phase == 0 then
-		if get(nav1mode) == 0 then
-			set(nav1obscopilot,get(nav1obscopilot)+1)
-		elseif get(nav1mode) == 1 then
-			--commandOnce(findCommand("sim/radios/stby_nav1_fine_up"))
-			set(nav1obscopilot,get(nav1obscopilot)+1)
+		if get(nav1mode) == 1 then
+			commandOnce(findCommand("sim/radios/stby_nav1_fine_up"))
 		elseif get(nav1mode) == 2 then
-			--commandOnce(findCommand("sim/radios/actv_nav1_fine_up"))
-			set(nav1obscopilot,get(nav1obscopilot)+1)
+			commandOnce(findCommand("sim/radios/actv_nav1_fine_up"))
+		elseif get(nav1mode) == 3 then
+			if get(nav1pulled) == 0 then
+				commandOnce(findCommand("sim/radios/actv_nav1_fine_up"))
+			else
+				if math.floor(get(nav1obscopilot)) == 359 then
+					set(nav1obscopilot,0)
+				else
+					set(nav1obscopilot,get(nav1obscopilot) + 1)
+				end
+			end
+		elseif get(nav1mode) == 4 then
+			if get(nav1pulled) == 0 then
+				commandOnce(findCommand("sim/radios/actv_nav1_fine_up"))
+			end
+		elseif get(nav1mode) == 5 then
+			if get(nav1pulled) == 0 then
+				commandOnce(findCommand("sim/radios/actv_nav1_fine_up"))
+			end
+		elseif get(nav1mode) == 6 then
+			if get(nav1pulled) == 0 then
+				commandOnce(findCommand("sim/radios/actv_nav1_fine_up"))
+			end
+		elseif get(nav1mode) == 7 then
+			if get(nav1pulled) == 0 then
+				set(elapsedtime,get(elapsedtime) + 10)
+			else
+				set(elapsedtime,get(elapsedtime) + 1)
+			end
 		end
 	end
 end
@@ -319,14 +419,38 @@ registerCommandHandler(nav1FineUp,0, nav1FineUpHandler)
 
 function nav1FineDnHandler(phase)
 	if phase == 0 then
-		if get(nav1mode) == 0 then
-			set(nav1obscopilot,get(nav1obscopilot)-1)
-		elseif get(nav1mode) == 1 then
-			--commandOnce(findCommand("sim/radios/stby_nav1_fine_down"))
-			set(nav1obscopilot,get(nav1obscopilot)-1)
+		if get(nav1mode) == 1 then
+			commandOnce(findCommand("sim/radios/stby_nav1_fine_down"))
 		elseif get(nav1mode) == 2 then
-			--commandOnce(findCommand("sim/radios/actv_nav1_fine_down"))
-			set(nav1obscopilot,get(nav1obscopilot)-1)
+			commandOnce(findCommand("sim/radios/actv_nav1_fine_down"))
+		elseif get(nav1mode) == 3 then
+			if get(nav1pulled) == 0 then
+				commandOnce(findCommand("sim/radios/actv_nav1_fine_down"))
+			else
+				if math.floor(get(nav1obscopilot)) == 0 then
+					set(nav1obscopilot,359)
+				else
+					set(nav1obscopilot,get(nav1obscopilot) - 1)
+				end
+			end
+		elseif get(nav1mode) == 4 then
+			if get(nav1pulled) == 0 then
+				commandOnce(findCommand("sim/radios/actv_nav1_fine_down"))
+			end
+		elseif get(nav1mode) == 5 then
+			if get(nav1pulled) == 0 then
+				commandOnce(findCommand("sim/radios/actv_nav1_fine_down"))
+			end
+		elseif get(nav1mode) == 6 then
+			if get(nav1pulled) == 0 then
+				commandOnce(findCommand("sim/radios/actv_nav1_fine_down"))
+			end
+		elseif get(nav1mode) == 7 then
+			if get(nav1pulled) == 0 then
+				set(elapsedtime,get(elapsedtime) - 10)
+			else
+				set(elapsedtime,get(elapsedtime) - 1)
+			end
 		end
 	end
 end
@@ -336,7 +460,9 @@ registerCommandHandler(nav1FineDn,0, nav1FineDnHandler)
 
 function update()
 	if get(com1power) == 1 then
-		set(elapsedtime,get(elapsedtime)+get(timeperiod))
+		if get(nav1mode) ~= 7 then
+			set(elapsedtime,get(elapsedtime)+get(timeperiod))
+		end
 	else
 		set(elapsedtime,0)
 	end
@@ -346,15 +472,17 @@ end
 
 function draw()
 	drawRectangle(0,0,723,100,rgbColour(0,0,0))
+	--LCD Shadows
+	drawText(sevenSegment,45,55,"888.88",30,false,true,TEXT_ALIGN_LEFT,shadow_colour)
+	drawText(sevenSegment,215,55,"888.88",30,false,true,TEXT_ALIGN_LEFT,shadow_colour)
+	drawText(sevenSegment,395,55,"888.88",30,false,true,TEXT_ALIGN_LEFT,shadow_colour)
+	drawText(sevenSegment,550,55,"888.88",30,false,true,TEXT_ALIGN_LEFT,shadow_colour)
+	drawText(sixteenSegment,215,15,"###:##",30,false,false,TEXT_ALIGN_LEFT,shadow_colour)
+	drawText(sixteenSegment,380,15,"#############",30,false,false,TEXT_ALIGN_LEFT,shadow_colour) --13 Digits
+	drawText(arial, 535, 80, "O\nB\nS", 12,true,false,TEXT_ALIGN_LEFT,shadow_colour)
+	drawText(arial, 690, 75, "TO", 14,true,false,TEXT_ALIGN_LEFT,shadow_colour)
+	drawText(arial, 690, 55, "FR", 14,true,false,TEXT_ALIGN_LEFT,shadow_colour)
 	if get(com1power) == 1 then
-		--drawText(sixteenSegment,45,15,"FLAG",30,false,true,TEXT_ALIGN_LEFT,quartz_colour)
-		--LCD Shadows
-		drawText(sevenSegment,45,55,"888.88",30,false,true,TEXT_ALIGN_LEFT,shadow_colour)
-		drawText(sevenSegment,215,55,"888.88",30,false,true,TEXT_ALIGN_LEFT,shadow_colour)
-		drawText(sevenSegment,395,55,"888.88",30,false,true,TEXT_ALIGN_LEFT,shadow_colour)
-		drawText(sevenSegment,575,55,"888.88",30,false,true,TEXT_ALIGN_LEFT,shadow_colour)
-		drawText(sixteenSegment,215,15,"###:##",30,false,false,TEXT_ALIGN_LEFT,shadow_colour)
-		drawText(sixteenSegment,380,15,"#############",30,false,false,TEXT_ALIGN_LEFT,shadow_colour) --13 Digits
 		--Active Freqs
 		drawText(sevenSegment,45,55,string.format("%3.2f",get(com1freq)/100),30,false,true,TEXT_ALIGN_LEFT,quartz_colour)
 		drawText(sevenSegment,395,55,string.format("%3.2f",get(nav1freq)/100),30,false,true,TEXT_ALIGN_LEFT,quartz_colour)
@@ -364,63 +492,116 @@ function draw()
 		elseif get(com1mode) == 1 then
 			--Nothing
 		elseif get(com1mode) == 3 then
-			drawText(sevenSegment,215,55,string.format("%06.2f",get(com1ch,channel_number - 1)/100),30,false,true,TEXT_ALIGN_LEFT,quartz_colour)
+			drawText(sevenSegment,215,55,string.format("%06.2f",get(com1ch,channel_number)/100),30,false,true,TEXT_ALIGN_LEFT,quartz_colour)
 			drawText(sixteenSegment,215,15," CH:" .. channel_number .. "",30,false,false,TEXT_ALIGN_LEFT,quartz_colour)
 		elseif get(com1mode) == 4 then
-			drawText(sevenSegment,215,55,string.format("%06.2f",get(com1ch,channel_number - 1)/100),30,false,true,TEXT_ALIGN_LEFT,quartz_colour)
+			drawText(sevenSegment,215,55,string.format("%06.2f",get(com1ch,channel_number)/100),30,false,true,TEXT_ALIGN_LEFT,quartz_colour)
 			drawText(sixteenSegment,215,15," PG:",30,false,false,TEXT_ALIGN_LEFT,quartz_colour)
 			if get(globaltime) % 1 > 0.5 then
 				drawText(sixteenSegment,215,15,"   :" .. channel_number .. "",30,false,false,TEXT_ALIGN_LEFT,quartz_colour)
 			end
 		elseif get(com1mode) == 5 then
 			if get(globaltime) % 1 > 0.5 then
-				drawText(sevenSegment,215,55,string.format("%06.2f",get(com1ch,channel_number - 1)/100),30,false,true,TEXT_ALIGN_LEFT,quartz_colour)
+				drawText(sevenSegment,215,55,string.format("%06.2f",get(com1ch,channel_number)/100),30,false,true,TEXT_ALIGN_LEFT,quartz_colour)
 			end
 			drawText(sixteenSegment,215,15," PG:" .. channel_number .. "",30,false,false,TEXT_ALIGN_LEFT,quartz_colour)
 		end
 		
 		if get(nav1mode) == 1 then
 			--Normal Mode
-			--drawText(sevenSegment,575,55,string.format("%6.2f",get(nav1stby)/100),30,false,true,TEXT_ALIGN_LEFT,quartz_colour)
+			drawText(sevenSegment,550,55,string.format("%6.2f",get(nav1stby)/100),30,false,true,TEXT_ALIGN_LEFT,quartz_colour)
 		elseif get(nav1mode) == 2 then
 			--Direct Entry Mode
 		elseif get(nav1mode) == 3 then
 			--CDI Mode
 			if get(nav1type) == 40 then
-				drawText(sevenSegment,575,55,"  L_0C",30,false,true,TEXT_ALIGN_LEFT,quartz_colour)
+				drawText(sevenSegment,550,55,"  L_0C",30,false,true,TEXT_ALIGN_LEFT,quartz_colour)
 			else
-				drawText(sevenSegment,575,55,"  " .. string.format("%01.2f",get(nav1obscopilot)/100):gsub("%.","_"),30,false,true,TEXT_ALIGN_LEFT,quartz_colour)
+				drawText(sevenSegment,550,55,"  " .. string.format("%01.2f",get(nav1obscopilot)/100):gsub("%.","_"),30,false,true,TEXT_ALIGN_LEFT,quartz_colour)
+				if get(nav1pulled) == 1 then
+					if get(globaltime) % 1 > 0.5 then
+						drawText(arial, 535, 80, "O\nB\nS", 12,true,false,TEXT_ALIGN_LEFT,quartz_colour)
+					end
+				else
+					drawText(arial, 535, 80, "O\nB\nS", 12,true,false,TEXT_ALIGN_LEFT,quartz_colour)
+				end
 			end
 			if get(nav1flag) == 1 then
-				if get(nav1hdefcopilot) < -2.25 then
-					drawText(sixteenSegment,380,15,"-+----X------",30,false,false,TEXT_ALIGN_LEFT,quartz_colour) --13 Digits
-				elseif get(nav1hdefcopilot) < -1.75 then
-					drawText(sixteenSegment,380,15,"--+---X------",30,false,false,TEXT_ALIGN_LEFT,quartz_colour) --13 Digits
-				elseif get(nav1hdefcopilot) < -1.25 then
-					drawText(sixteenSegment,380,15,"---+--X------",30,false,false,TEXT_ALIGN_LEFT,quartz_colour) --13 Digits
-				elseif get(nav1hdefcopilot) < -0.75 then
-					drawText(sixteenSegment,380,15,"----+-X------",30,false,false,TEXT_ALIGN_LEFT,quartz_colour) --13 Digits
-				elseif get(nav1hdefcopilot) < -0.25 then
-					drawText(sixteenSegment,380,15,"-----+X------",30,false,false,TEXT_ALIGN_LEFT,quartz_colour) --13 Digits
-				elseif get(nav1hdefcopilot) < 0.25 then
-					drawText(sixteenSegment,380,15,"------@------",30,false,false,TEXT_ALIGN_LEFT,quartz_colour) --13 Digits
-				elseif get(nav1hdefcopilot) < 0.75 then
-					drawText(sixteenSegment,380,15,"------X+-----",30,false,false,TEXT_ALIGN_LEFT,quartz_colour) --13 Digits
-				elseif get(nav1hdefcopilot) < 1.25 then
-					drawText(sixteenSegment,380,15,"------X-+----",30,false,false,TEXT_ALIGN_LEFT,quartz_colour) --13 Digits
-				elseif get(nav1hdefcopilot) < 1.75 then
-					drawText(sixteenSegment,380,15,"------X--+---",30,false,false,TEXT_ALIGN_LEFT,quartz_colour) --13 Digits
-				elseif get(nav1hdefcopilot) < 2.25 then
-					drawText(sixteenSegment,380,15,"------X---+--",30,false,false,TEXT_ALIGN_LEFT,quartz_colour) --13 Digits
-				else
-					drawText(sixteenSegment,380,15,"------X----+-",30,false,false,TEXT_ALIGN_LEFT,quartz_colour) --13 Digits
+				if get(nav1tofromcopilot) == 0 then
+					drawText(sixteenSegment,380,15," FLAG ------",30,false,false,TEXT_ALIGN_LEFT,quartz_colour)
+				elseif get(nav1tofromcopilot) == 1 then
+					if get(nav1hdefcopilot) < -2.25 then
+						drawText(sixteenSegment,380,15,"-+----^------",30,false,false,TEXT_ALIGN_LEFT,quartz_colour) --13 Digits
+					elseif get(nav1hdefcopilot) < -1.75 then
+						drawText(sixteenSegment,380,15,"--+---^------",30,false,false,TEXT_ALIGN_LEFT,quartz_colour) --13 Digits
+					elseif get(nav1hdefcopilot) < -1.25 then
+						drawText(sixteenSegment,380,15,"---+--^------",30,false,false,TEXT_ALIGN_LEFT,quartz_colour) --13 Digits
+					elseif get(nav1hdefcopilot) < -0.75 then
+						drawText(sixteenSegment,380,15,"----+-^------",30,false,false,TEXT_ALIGN_LEFT,quartz_colour) --13 Digits
+					elseif get(nav1hdefcopilot) < -0.25 then
+						drawText(sixteenSegment,380,15,"-----+^------",30,false,false,TEXT_ALIGN_LEFT,quartz_colour) --13 Digits
+					elseif get(nav1hdefcopilot) < 0.25 then
+						drawText(sixteenSegment,380,15,"------@------",30,false,false,TEXT_ALIGN_LEFT,quartz_colour) --13 Digits
+					elseif get(nav1hdefcopilot) < 0.75 then
+						drawText(sixteenSegment,380,15,"------^+-----",30,false,false,TEXT_ALIGN_LEFT,quartz_colour) --13 Digits
+					elseif get(nav1hdefcopilot) < 1.25 then
+						drawText(sixteenSegment,380,15,"------^-+----",30,false,false,TEXT_ALIGN_LEFT,quartz_colour) --13 Digits
+					elseif get(nav1hdefcopilot) < 1.75 then
+						drawText(sixteenSegment,380,15,"------^--+---",30,false,false,TEXT_ALIGN_LEFT,quartz_colour) --13 Digits
+					elseif get(nav1hdefcopilot) < 2.25 then
+						drawText(sixteenSegment,380,15,"------^---+--",30,false,false,TEXT_ALIGN_LEFT,quartz_colour) --13 Digits
+					else
+						drawText(sixteenSegment,380,15,"------^----+-",30,false,false,TEXT_ALIGN_LEFT,quartz_colour) --13 Digits
+					end
+				elseif get(nav1tofromcopilot) == 2 then
+					if get(nav1hdefcopilot) < -2.25 then
+						drawText(sixteenSegment,380,15,"-+----!------",30,false,false,TEXT_ALIGN_LEFT,quartz_colour) --13 Digits
+					elseif get(nav1hdefcopilot) < -1.75 then
+						drawText(sixteenSegment,380,15,"--+---!------",30,false,false,TEXT_ALIGN_LEFT,quartz_colour) --13 Digits
+					elseif get(nav1hdefcopilot) < -1.25 then
+						drawText(sixteenSegment,380,15,"---+--!------",30,false,false,TEXT_ALIGN_LEFT,quartz_colour) --13 Digits
+					elseif get(nav1hdefcopilot) < -0.75 then
+						drawText(sixteenSegment,380,15,"----+-!------",30,false,false,TEXT_ALIGN_LEFT,quartz_colour) --13 Digits
+					elseif get(nav1hdefcopilot) < -0.25 then
+						drawText(sixteenSegment,380,15,"-----+!------",30,false,false,TEXT_ALIGN_LEFT,quartz_colour) --13 Digits
+					elseif get(nav1hdefcopilot) < 0.25 then
+						drawText(sixteenSegment,380,15,"------?------",30,false,false,TEXT_ALIGN_LEFT,quartz_colour) --13 Digits
+					elseif get(nav1hdefcopilot) < 0.75 then
+						drawText(sixteenSegment,380,15,"------!+-----",30,false,false,TEXT_ALIGN_LEFT,quartz_colour) --13 Digits
+					elseif get(nav1hdefcopilot) < 1.25 then
+						drawText(sixteenSegment,380,15,"------!-+----",30,false,false,TEXT_ALIGN_LEFT,quartz_colour) --13 Digits
+					elseif get(nav1hdefcopilot) < 1.75 then
+						drawText(sixteenSegment,380,15,"------!--+---",30,false,false,TEXT_ALIGN_LEFT,quartz_colour) --13 Digits
+					elseif get(nav1hdefcopilot) < 2.25 then
+						drawText(sixteenSegment,380,15,"------!---+--",30,false,false,TEXT_ALIGN_LEFT,quartz_colour) --13 Digits
+					else
+						drawText(sixteenSegment,380,15,"------!----+-",30,false,false,TEXT_ALIGN_LEFT,quartz_colour) --13 Digits
+					end
 				end
 			else
 				drawText(sixteenSegment,380,15," FLAG ------",30,false,false,TEXT_ALIGN_LEFT,quartz_colour)
 			end
+		elseif get(nav1mode) == 4 then
+			drawText(arial, 690, 75, "TO", 14,true,false,TEXT_ALIGN_LEFT,quartz_colour)
+			if get(nav1flag) == 1 then
+				drawText(sevenSegment,550,55,"  " .. string.format("%01.2f",get(nav1bearing)/100):gsub("%.","_"),30,false,true,TEXT_ALIGN_LEFT,quartz_colour)
+			else
+				drawText(sevenSegment,550,55,"  -_--",30,false,true,TEXT_ALIGN_LEFT,quartz_colour)
+			end
+		elseif get(nav1mode) == 5 then
+			drawText(arial, 690, 55, "FR", 14,true,false,TEXT_ALIGN_LEFT,quartz_colour)
+			if get(nav1flag) == 1 then
+				drawText(sevenSegment,550,55,"  " .. string.format("%01.2f",(get(nav1bearing)+180 % 360)/100):gsub("%.","_"),30,false,true,TEXT_ALIGN_LEFT,quartz_colour)
+			else
+				drawText(sevenSegment,550,55,"  -_--",30,false,true,TEXT_ALIGN_LEFT,quartz_colour)
+			end
+		elseif get(nav1mode) == 6 then
+			drawText(sevenSegment,550,55,string.format("% 3i",math.floor(math.abs(get(elapsedtime))/60)) .. ":" .. string.format("%02i",math.floor(math.abs(get(elapsedtime))) % 60),30,false,true,TEXT_ALIGN_LEFT,quartz_colour)
+		elseif get(nav1mode) == 7 then
+			if get(globaltime) % 1 > 0.5 then
+				drawText(sevenSegment,550,55,string.format("% 3i",math.floor(math.abs(get(elapsedtime))/60)) .. ":" .. string.format("%02i",math.floor(math.abs(get(elapsedtime))) % 60),30,false,true,TEXT_ALIGN_LEFT,quartz_colour)
+			end
 		end
-		--Test Segments
-		drawText(sevenSegment,575,55,string.format("% 3i",math.floor(math.abs(get(elapsedtime))/60)) .. ":" .. string.format("%02i",math.floor(math.abs(get(elapsedtime))) % 60),30,false,true,TEXT_ALIGN_LEFT,quartz_colour)
 	end
 	drawAll(components)
 end

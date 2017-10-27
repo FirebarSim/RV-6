@@ -149,7 +149,7 @@ P _gear/0/_lonE -24.0
 P _gear/0/_lonN -24.0
 P _gear/0/_lonR 0.0
 P _gear/0/_scon 3306.548828125
-P _gear/0/_stat_def 0.222696185
+P _gear/0/_stat_def 0.222696200
 P _gear/0/_steerdeg_hispeed 0.0
 P _gear/0/_steerdeg_lospeed 0.0
 P _gear/0/_strut_comp 0.0
@@ -183,7 +183,7 @@ P _gear/1/_lonE -24.0
 P _gear/1/_lonN -24.0
 P _gear/1/_lonR 0.0
 P _gear/1/_scon 3306.548828125
-P _gear/1/_stat_def 0.222696185
+P _gear/1/_stat_def 0.222696200
 P _gear/1/_steerdeg_hispeed 0.0
 P _gear/1/_steerdeg_lospeed 0.0
 P _gear/1/_strut_comp 0.0
@@ -15020,7 +15020,7 @@ P _part/85/_part_specs_invis 1
 P _part/85/_part_tex 0
 P _part/85/_part_the 0.0
 P _part/85/_part_x -3.309755802
-P _part/85/_part_y -3.465186596
+P _part/85/_part_y -3.465186357
 P _part/85/_part_z 5.288862705
 P _part/85/_patt_con 0
 P _part/85/_patt_prt 0
@@ -16497,7 +16497,7 @@ P _part/86/_part_specs_invis 1
 P _part/86/_part_tex 0
 P _part/86/_part_the 0.0
 P _part/86/_part_x 3.309755802
-P _part/86/_part_y -3.465186596
+P _part/86/_part_y -3.465186357
 P _part/86/_part_z 5.288862705
 P _part/86/_patt_con 0
 P _part/86/_patt_prt 0
@@ -25520,70 +25520,6 @@ PROPERTIES_END
 PANEL_2D_BEGIN
 PANEL_2D_END
 PANEL_3D_BEGIN
-gen_LED COM 1
-  POS 700.000000 613.500000
-  IMAGE gen_LED_RV6
-  DATAREF sim/cockpit2/radios/actuators/com1_frequency_hz
-  SHOW_EQUAL 1.000000 sim/cockpit/electrical/avionics_on
-  SHOW_GREATER 1.000000 sim/cockpit2/radios/actuators/com1_power
-  LIGHT_MODE MECHANICAL
-  LIGHT_RHEOSTAT -2
-  BUS_SRC 1073741824
-  KEY_FRAME 0.000000 0.000000 1.000000
-  KEY_FRAME 1.000000 0.010000
-  DIGITS 5
-  DECIMALS 2
-  PERIOD_WIDTH 0
-  LED_ROWS 0
-
-gen_LED COM 1 Stby
-  POS 700.000000 554.500000
-  IMAGE gen_LED_RV6
-  DATAREF sim/cockpit2/radios/actuators/com1_standby_frequency_hz
-  SHOW_EQUAL 1.000000 sim/cockpit/electrical/avionics_on
-  SHOW_GREATER 1.000000 sim/cockpit2/radios/actuators/com1_power
-  LIGHT_MODE MECHANICAL
-  LIGHT_RHEOSTAT 0
-  BUS_SRC 1073741824
-  KEY_FRAME 0.000000 0.000000 1.000000
-  KEY_FRAME 1.000000 0.010000
-  DIGITS 5
-  DECIMALS 2
-  PERIOD_WIDTH 0
-  LED_ROWS 0
-
-gen_LED NAV 1
-  POS 700.000000 495.500000
-  IMAGE gen_LED_RV6
-  DATAREF sim/cockpit2/radios/actuators/nav1_frequency_hz
-  SHOW_EQUAL 1.000000 sim/cockpit/electrical/avionics_on
-  SHOW_GREATER 1.000000 sim/cockpit2/radios/actuators/nav1_power
-  LIGHT_MODE MECHANICAL
-  LIGHT_RHEOSTAT 0
-  BUS_SRC 1073741824
-  KEY_FRAME 0.000000 0.000000 1.000000
-  KEY_FRAME 1.000000 0.010000
-  DIGITS 5
-  DECIMALS 2
-  PERIOD_WIDTH 0
-  LED_ROWS 0
-
-gen_LED NAV 1 Stby
-  POS 700.000000 436.500000
-  IMAGE gen_LED_RV6
-  DATAREF sim/cockpit2/radios/actuators/nav1_standby_frequency_hz
-  SHOW_EQUAL 1.000000 sim/cockpit/electrical/avionics_on
-  SHOW_GREATER 1.000000 sim/cockpit2/radios/actuators/nav1_power
-  LIGHT_MODE MECHANICAL
-  LIGHT_RHEOSTAT 0
-  BUS_SRC 1073741824
-  KEY_FRAME 0.000000 0.000000 1.000000
-  KEY_FRAME 1.000000 0.010000
-  DIGITS 5
-  DECIMALS 2
-  PERIOD_WIDTH 0
-  LED_ROWS 0
-
 gen_rotary OMI Background
   POS 59.500000 639.500000
   IMAGE markers_RV6
@@ -25665,37 +25601,5 @@ gen_rotary OMI I
   CURSOR DEFAULT
   CLICK_DX 0
   CLICK_DY 0
-
-gen_LED XPNDR
-  POS 472.000000 505.500000
-  IMAGE gen_LED_RV6
-  DATAREF sim/cockpit2/radios/actuators/transponder_code
-  SHOW_EQUAL 1.000000 sim/cockpit/electrical/avionics_on
-  SHOW_GREATER 1.000000 sim/cockpit2/radios/actuators/transponder_mode
-  LIGHT_MODE MECHANICAL
-  LIGHT_RHEOSTAT 0
-  BUS_SRC 1073741824
-  KEY_FRAME 0.000000 0.000000 1.000000
-  KEY_FRAME 1.000000 0.010000
-  DIGITS 4
-  DECIMALS 2
-  PERIOD_WIDTH -1
-  LED_ROWS 0
-
-gen_LED XPNDR
-  POS 231.000000 505.500000
-  IMAGE gen_LED_RV6
-  DATAREF RV-6/data/flight_level
-  SHOW_EQUAL 1.000000 sim/cockpit/electrical/avionics_on
-  SHOW_GREATER 1.000000 sim/cockpit2/radios/actuators/transponder_mode
-  LIGHT_MODE MECHANICAL
-  LIGHT_RHEOSTAT 0
-  BUS_SRC 1073741824
-  KEY_FRAME 0.000000 0.000000 1.000000
-  KEY_FRAME 1.000000 0.010000
-  DIGITS 3
-  DECIMALS 2
-  PERIOD_WIDTH -1
-  LED_ROWS 0
 
 PANEL_3D_END
