@@ -20,6 +20,8 @@ defineProperty("avionicsswitch",globalPropertyi("sim/cockpit2/switches/avionics_
 defineProperty("bus2power",globalPropertyfae("sim/cockpit2/electrical/bus_volts",2))
 defineProperty("bus2extra",globalPropertyfae("sim/cockpit2/electrical/plugin_bus_load_amps",2))
 
+defineProperty("instbrightauto",globalPropertyfa("sim/cockpit2/electrical/instrument_brightness_ratio_auto"))
+
 
 function rgbColour(r,g,b)
 	return {r/255,g/255,b/255}
@@ -137,4 +139,16 @@ function draw()
 			drawText(arial, 48, 30, "FL", 14,true,false,TEXT_ALIGN_LEFT,quartz_colour)
 		end
 	end
+	drawCircle (10,10,5,true,{0,1,0})
+	drawCircle (20,10,5,true,{0,1,0,1})
+	drawCircle (30,10,5,true,{0,1,0,0.5})
+	drawCircle (40,10,5,true,{0,1,0,0})
+	drawCircle (50,10,5,true,{0,1,0,get(instbrightauto,1)})
+	drawCircle (60,10,5,true,{0,1,0})
+	drawCircle (70,10,5,true,{0,1*(50/250),0})
+	drawCircle (80,10,5,true,{0,1*(80/250),0})
+	--FSX
+	--Day = 255,255,255
+	--Luminous = 255,50,50
+	--Night = 100,80,80
 end
