@@ -1,10 +1,12 @@
-[RV-6 INFO]: Path to module: C:\Users/mburl/Desktop/X-Plane 11/Aircraft/Firebar/RV-6/plugins/RV-6/data/modules/main.lua
+[RV-6 INFO]: Path to module: G:\XP11SteamLibrary/steamapps/common/X-Plane 11/Aircraft/Firebar/Vans RV-6/plugins/RV-6/data/modules/main.lua
 [RV-6 INFO]: Loading module...
 [RV-6 INFO]:  [LUA]: loading	module
 [RV-6 INFO]:  [LUA]: loading	cabin_heat
 [RV-6 INFO]:  [LUA]: loading	transponder
 [RV-6 INFO]:  [LUA]: loading	navcom1
+[RV-6 INFO]:  [LUA]: loading	audiopanel
 [RV-6 INFO]:  [LUA]: loading	eigauges
+[RV-6 INFO]:  [LUA]: loading	headbobble
 [RV-6 INFO]: Loading cursors...
 [RV-6 INFO]: Module loaded
 [RV-6 INFO]: Disabling...
